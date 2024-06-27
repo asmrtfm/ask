@@ -1,7 +1,7 @@
 # ask
 
 **USAGE:**
->        ask [<OPTIONS>] [<QUESTION>]**
+>        `ask [<OPTIONS>] [<QUESTION>]`
 >
 
 **SYNOPSIS:**
@@ -13,18 +13,18 @@
 >
 
 **OPTIONS:**
->   (*) OPTIONS must precede QUESTION if supplied.
+>   * OPTIONS must precede QUESTION if supplied.
 >   
->   -h,--help   show this helpful usage information
+>   `-h`,`--help`   show this helpful usage information
 >
->   -y,--yes    fail if answer is not (y|yes)
+>   `-y`,`--yes`    fail if answer is not (y|yes)
 >
->   -n,--no     fail if answer is not (n|no)
+>   `-n`,`--no`     fail if answer is not (n|no)
 >
->   -l,--loop   repeatedly ask [<QUESTION>] until a desired answer is given.
->               the desired answer can be set using the (-y|--yes) and (-n|--no) flags,
+>   `-l`,`--loop`   repeatedly ask [<QUESTION>] until a desired answer is given.
+>               the desired answer can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
 >                or defaults to (y|yes)
 >
->   -s,         ask [<QUESTION>] again if a response
->    --strict    other than (y|yes) or (n|no) is given
+>   `-s`,         ask [<QUESTION>] again if a response
+>    `--strict`    other than (y|yes) or (n|no) is given
 >
