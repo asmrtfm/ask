@@ -23,9 +23,10 @@
 >     -n,--no      fail if answer is not (n|no)
 >
 >   -l,--loop      repeatedly ask [<QUESTION>] until a desired answer is given.
->                       the desired answer can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
->                       or defaults to (y|yes)
+>                   the desired answer can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
+>                    or defaults to (y|yes)
 >
 >     -s,           ask [<QUESTION>] again if a response
 >      --strict      other than (y|yes) or (n|no) is given
+>
 >```
