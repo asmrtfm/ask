@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
+
 [[ "${1,,}" != +(\-)@(h)?(elp) ]] || { cat <<'EOL'
 
 USAGE:
          ask [<OPTION>] [<QUESTION>]
 
 SYNOPSIS:
-      A wrapper for `read -p`
-      Provide a yes-or-no QUESTION ('?' will be appended for you)
-      Returns true(0) for (y|yes), or false(1) for (n|no)
-      If no QUESTION is provided it will simply prompt for a '(Y/n)' response
-      Response is case-insensitive
+      Prompt the user with an ostensibly yes-or-no QUESTION (all input is optional).
+      Returns 0(true) for (y|yes), or 1(false) for (n|no).
+      If no QUESTION is provided it will simply prompt for a '(Y/n)' response.
+      Response is case-insensitive.
 
 OPTIONS:
    * OPTIONS must precede QUESTION if supplied.
@@ -31,13 +31,15 @@ EOL
 	exit 0
 }
 
+shopt -s extglob
+
 Ask='Ask'
-Want='@(y)?(es)'
+Desire='@(y)?(es)'
 Loop=false
 for((p=0,a=1;a<=$#;a++)){
 	case "${!a,,}" in
-    '-y'|'--yes') ((p=a)) ;;
-	'-n'|'--no') ((p=a)); Want='@(n)?(o)' ;;
+	'-y'|'--yes') ((p=a)) ;;
+	'-n'|'--no') ((p=a)); Desire='@(n)?(o)' ;;
 	'-s'|'--strict') ((p=a)); Ask='Strict' ;;
 	'-l'|'--loop') ((p=a)); Loop=true ;;
 	*) continue
@@ -45,15 +47,18 @@ for((p=0,a=1;a<=$#;a++)){
 }
 
 Ask() { local Ans ; printf "${*:2}\n" ; read -p '(Y/n): ' Ans ; [[ "${Ans,,}" == ${1} ]] ; }
+
 Strict() {
-	local Ans ; printf "${*:2}\n"; read -p '(Y/n): ' Ans
-	[[ "${Ans,,}" == @(n?(o)|y?(es)) ]] || Strict "$1" "${*:2}"
-	[[ "${Ans,,}" == ${1} ]]
+	printf "${*:2}\n"
+	read -p '(Y/n): ' Ans
+	[[ "${Ans,,}" == @(n?(o)|y?(es)) ]] || Strict ${1} "${*:2}"
+	[[ "${Ans,,}" == $1 ]]
 }
-Pester() { $Ask "$1" "${*:2}" || Pester "$1" "${*:2}"; }
+
+Pester() { $Ask "$1" "${@:2}" || Pester "$1" "${*:2}"; }
 
 if $Loop ; then
-	Pester "$Want" "${*:$((++p))}"
+	Pester "$Desire" "${*:$((++p))}"
 else
-	$Ask "$Want" "${*:$((++p))}"
+	$Ask "$Desire" "${*:$((++p))}"
 fi

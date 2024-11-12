@@ -5,11 +5,10 @@
 >
 
 **SYNOPSIS:**
->         A wrapper for `read -p`
->         Provide a yes-or-no QUESTION ('?' will be appended for you)
->         Returns true(0) for (y|yes), or false(1) for (n|no)
->         If no QUESTION is provided it will simply prompt for a '(Y/n)' response
->         Response is case-insensitive
+>        Prompt the user with an ostensibly yes-or-no QUESTION (all input is optional).
+>        Returns 0(true) for (y|yes), or 1(false) for (n|no).
+>        If no QUESTION is provided it will simply prompt for a '(Y/n)' response.
+>        Response is case-insensitive.
 >
 
 **OPTIONS:**
