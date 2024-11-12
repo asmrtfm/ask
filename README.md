@@ -14,18 +14,24 @@
 **OPTIONS:**
 >```
 >   (*) OPTIONS must precede QUESTION if supplied.
+>   (*) Trailing args always comprise QUESTION (escapes are interpretted).
 >
->   -h,--help      show this helpful usage information
+>   -h,--help   show this helpful usage information
 >
->    -y,--yes      fail if answer is not (y|yes)
+>   -y,--yes    fail if answer is not (y|yes)
 >
->     -n,--no      fail if answer is not (n|no)
+>   -n,--no     fail if answer is not (n|no)
 >
->   -l,--loop      repeatedly ask [<QUESTION>] until a desired answer is given.
->                   the desired answer can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
->                    or defaults to (y|yes)
+>   -l,         repeatedly ask [<QUESTION>] until a desired response is given.
+>    --loop     the desired response can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
+>               (default is (y|yes) )
 >
->     -s,           ask [<QUESTION>] again if a response
->      --strict      other than (y|yes) or (n|no) is given
+>   -s,         ask [<QUESTION>] again if a response
+>    --strict    other than (y|yes) or (n|no) is given
+>
+>   -p,         write the user's response to STDOUT
+>    --prompt   (deactivates all other options)
+>               (causes `ask` to function as a simple read prompt)
+>               (optional: ` --prompt=MESSAGE `)
 >
 >```

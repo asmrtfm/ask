@@ -12,20 +12,26 @@ SYNOPSIS:
       Response is case-insensitive.
 
 OPTIONS:
-   * OPTIONS must precede QUESTION if supplied.
-   
+   (*) OPTIONS must precede QUESTION if supplied.
+   (*) Trailing args always comprise QUESTION (escapes are interpretted).
+
    -h,--help   show this helpful usage information
 
    -y,--yes    fail if answer is not (y|yes)
 
    -n,--no     fail if answer is not (n|no)
 
-   -l,--loop   repeatedly ask [<QUESTION>] until a desired answer is given.
-               the desired answer can be set using the (-y|--yes) and (-n|--no) flags,
-                or defaults to (y|yes)
+   -l,         repeatedly ask [<QUESTION>] until a desired response is given.
+    --loop     the desired response can be set using the (`-y`|`--yes`) and (`-n`|`--no`) flags,
+               (default is (y|yes) )
 
    -s,         ask [<QUESTION>] again if a response
     --strict    other than (y|yes) or (n|no) is given
+
+   -p,         write the response to STDOUT
+    --prompt   (deactivates all other options)
+               (causes `ask` to function as a simple read prompt)
+               (optional: ` --prompt=MESSAGE `)
 
 EOL
 	exit 0
@@ -35,15 +41,17 @@ shopt -s extglob
 
 Ask='Ask'
 Desire='@(y)?(es)'
-Loop=false
+PromptLine='(response): '
 for((p=0,a=1;a<=$#;a++)){
-	case "${!a,,}" in
-	'-y'|'--yes') ((p=a)) ;;
-	'-n'|'--no') ((p=a)); Desire='@(n)?(o)' ;;
-	'-s'|'--strict') ((p=a)); Ask='Strict' ;;
-	'-l'|'--loop') ((p=a)); Loop=true ;;
-	*) continue
-	esac
+  case "${!a,,}" in
+  '-y'|'--yes') ((p=a)) ;;
+  '-n'|'--no') ((p=a)); Desire='@(n)?(o)' ;;
+  '-s'|'--strict') ((p=a)); Ask='Strict' ;;
+  '-l'|'--loop') ((p=a)); Action='Pester' ;;
+  +(\-)@(p)?(rompt)?(\=)*) ((p=a)); Action='Tell'
+    [[ "${!a}" != *\=* ]] || PromptLine="${!a#*\=}" ;;
+  *) continue
+  esac
 }
 
 Ask() { local Ans ; printf "${*:2}\n" ; read -p '(Y/n): ' Ans ; [[ "${Ans,,}" == ${1} ]] ; }
@@ -57,8 +65,6 @@ Strict() {
 
 Pester() { $Ask "$1" "${@:2}" || Pester "$1" "${*:2}"; }
 
-if $Loop ; then
-	Pester "$Desire" "${*:$((++p))}"
-else
-	$Ask "$Desire" "${*:$((++p))}"
-fi
+Tell() { local Ans; printf "${*:2}\n" >/dev/stderr || true; read -p "$PromptLine" Ans ; echo "$Ans"; }
+
+${Action:-$Ask} "$Desire" "${*:$((++p))}"
